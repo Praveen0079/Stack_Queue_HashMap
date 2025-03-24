@@ -1,15 +1,18 @@
 package Hashmap;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Scanner;
 
 class ZeroSumSubarrays {
-    public static List<List<Integer>> findZeroSumSubarrays(int[] arr) {
-        Map<Integer, List<Integer>> map = new HashMap<>();
-        List<List<Integer>> result = new ArrayList<>();
+    public static void findZeroSumSubarrays(int[] arr) {
+        HashMap<Integer, List<Integer>> map = new HashMap<>();
         int prefixSum = 0;
+        boolean found = false;
 
         // Initialize map with 0 sum at index -1 to capture subarrays starting from index 0
-        map.put(0, new ArrayList<>());
+        map.put(0, new LinkedList<>());
         map.get(0).add(-1);
 
         for (int i = 0; i < arr.length; i++) {
@@ -17,17 +20,20 @@ class ZeroSumSubarrays {
 
             // If prefixSum has been seen before, it means a zero-sum subarray exists
             if (map.containsKey(prefixSum)) {
+                found = true;
                 for (int start : map.get(prefixSum)) {
-                    result.add(Arrays.asList(start + 1, i)); // Store subarray start and end index
+                    System.out.println("Zero-sum subarray found from index " + (start + 1) + " to " + i);
                 }
             }
 
             // Store the current prefixSum with its index
-            map.putIfAbsent(prefixSum, new ArrayList<>());
+            map.putIfAbsent(prefixSum, new LinkedList<>());
             map.get(prefixSum).add(i);
         }
 
-        return result;
+        if (!found) {
+            System.out.println("No zero-sum subarrays found.");
+        }
     }
 
     public static void main(String[] args) {
@@ -43,17 +49,7 @@ class ZeroSumSubarrays {
             arr[i] = sc.nextInt();
         }
 
-        List<List<Integer>> subarrays = findZeroSumSubarrays(arr);
-
-        if (subarrays.isEmpty()) {
-            System.out.println("No zero-sum subarrays found.");
-        } else {
-            System.out.println("Zero-sum subarrays found at indices:");
-            for (List<Integer> subarray : subarrays) {
-                System.out.println(subarray);
-            }
-        }
-
+        findZeroSumSubarrays(arr);
         sc.close();
     }
 }
